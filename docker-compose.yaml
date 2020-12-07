@@ -14,3 +14,7 @@ services:
       - YOUR_HOST_DIRECTORY:/opt/geoserver/data_dir
     depends_on:
       - postgis
+networks:
+  default:
+    external:
+      name: gist604b
