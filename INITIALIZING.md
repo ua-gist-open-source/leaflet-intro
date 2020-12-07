@@ -11,7 +11,7 @@ docker run --network gist604b -e STATE=arizona -e DATABASE=arizona aaryno/popula
 If successful, you'll see the output of the `shp2pgsl` and `psql` INSERTs.
 Next, create the geoserver components. This will create layers for all the DB tables you just created as well as a layer group with three of the layers named `osm:osm`:
 ```
-docker run --network gist604b -e STATE=arizona -e DATABASE=arizona aaryno/populate-docker-webgis populate-postgis.sh
+docker run --network gist604b -e STATE=arizona -e DATABASE=arizona aaryno/populate-docker-webgis populate-geoserver.sh
 ```
 That's it.
 
