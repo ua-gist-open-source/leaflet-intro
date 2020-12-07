@@ -21,10 +21,14 @@ See https://github.com/ua-gist-open-source/docker-compose-populate to update or 
 ## To see if things are working:
 
 ### Geoserver Running:
+```
 docker run --network gist604b aaryno/populate-docker-geo curl -u admin:geoserver http://geoserver:8080/geoserver/rest/workspaces
-
+```
 ### PostGIS Installed in your database:
+```
 docker-compose exec postgis psql -d arizona -U postgres -c "select postgis_full_version()"
-
+```
 ### PostGIS database has data:
+```
 docker-compose exec postgis psql -d arizona -U postgres -c "select count(*) from waterways"
+```
