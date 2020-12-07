@@ -31,6 +31,7 @@ Leaflet (https://leafletjs.com/) is an open source javascript library for servin
   - `waterways`
 - Geoserver Layergroup named `osm` in the `osm` workspace containing the 18 layers listed above
 - Custom SLDs for the layers above
+- docker network named `gist604b` created with `docker network create gist604b`
 
 _Important: If the prerequisites are not met, see [INITIALIZING.md](INITIALIZING.md)_
 
