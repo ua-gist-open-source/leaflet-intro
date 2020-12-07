@@ -5,30 +5,12 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - /Users/aaryno/postgres_data:/var/lib/postgresql
+      - YOUR_HOST_DIRECTORY:/var/lib/postgresql
   geoserver:
     image: "kartoza/geoserver"
     ports:
       - "8080:8080"
     volumes:
-      - /Users/aaryno/geoserver_data:/opt/geoserver/data_dir
+      - YOUR_HOST_DIRECTORY:/opt/geoserver/data_dir
     depends_on:
       - postgis
-  leaflet:
-    image: aaryno/leaflet-intro
-    ports:
-      - "80:80"
-    depends_on:
-      - geoserver
-  populate:
-    image: "aaryno/postgis-populate-osm"
-    depends_on:
-      - postgis
-    deploy:
-      replicas: 0
-    environment:
-      - STATE=delaware
-      - DATABASE=delaware
-      - DB_PORT=5432
-      - DB_HOST=postgis
-      - DB_USER=postgres
