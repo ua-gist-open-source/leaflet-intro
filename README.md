@@ -32,7 +32,7 @@ Leaflet (https://leafletjs.com/) is an open source javascript library for servin
 - Geoserver Layergroup named `osm` in the `osm` workspace containing the 18 layers listed above
 - Custom SLDs for the layers above
 
-_Important: If the prerequisites are not met, see [Initializing.md](Initializing.md)_
+_Important: If the prerequisites are not met, see [INITIALIZING.md](INITIALIZING.md)_
 
 ### 1. Getting started with Leaflet:
 Refer to the following 
