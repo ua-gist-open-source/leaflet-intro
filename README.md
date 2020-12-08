@@ -69,17 +69,28 @@ If the leaflet-intro container is running:
 docker stop leaflet-intro
 ```
 
-### 4. Add a WMS from geoserver to your Leaflet Map
-
-Read the example at https://leafletjs.com/examples/wms/wms.html.
-
-Create a new file named `geoserver.html` and copy the contents of `getting-started.html` as a starting point. You are going to add a new layer based on your own geoserver layer group named `osm:osm` from a previous assignment. Note that the initial map coordinates are set in this line:
+### 4. Rebuild the docker image
+The starting location for the map is defined with
 ```
     var map = new L.Map('map', { center: new L.LatLng(21.38,-157.8), zoom: 6, attributionControl:true, zoomControl:false, minZoom:6});  
 ```
-Which is centered on Hawaii. If you are using a different state, you will need to find the coordinates that make most sense for that state or else you will have to pan the world to find your OSM WMS data.
+where `21.38,-157.8` is the lat/long of Hawaii. We want to change the starting location to be your home town (or any other place on earth if you happen to live at `21.38,-157.8`). To do this, we need to edit the `getting-started.html` page and rebuild the docker container:
 
-As you read the example, note some differences in the urls of their example. You will add the following two commands _after_ the commands that add the generic OSM map.
+1) Edit the `getting-started.html` page, changing the map initialization coordinate.
+2) Rebuild the container with `docker build . -t <docker-usermame>/leaflet-intro`
+3) Restart the container with `docker run -p 8880:80 --rm --name leaflet-intro <docker-username>/leaflet-intro`
+
+Visit  http://localhost:8880/getting-started.html to verify the starting location is different. 
+
+_Deliverable: Take a screenshot of the initial page of getting-started.html and name it `screenshot-getting-started.png`_
+
+### 5. Add a WMS from geoserver to your Leaflet Map
+
+Read the example at https://leafletjs.com/examples/wms/wms.html.
+
+Create a brand new file named `geoserver.html` and copy the contents of `getting-started.html` as a starting point. You are going to add a new layer based on your own geoserver layer group named `osm:osm` from a previous assignment. Note that you will want to update the initial map coordinates, depending on what state you have chosen for your database. Otherwise anybody using your map will have to pan the world to find your OSM WMS data.
+
+As you read the example, note some differences in the urls of their example. You will add the following two commands _after_ the commands that add the generic OSM map. This goes in your `geoserver.html` page:
 
 ```
     var wmsLayer= L.tileLayer.wms("http://localhost:8080/geoserver/osm/wms", {
@@ -90,7 +101,9 @@ As you read the example, note some differences in the urls of their example. You
     map.addLayer(wmsLayer)
 ```  
 
-Save the `geoserver.html` page and open it in your browser. Note that this is only a local file and doesn't exist yet in your docker container. We are going to add it to the docker container. In the file [Dockerfile](Dockerfile), add a new line with:
+Save the `geoserver.html` page and open it in your browser. You should see the symbology from your WMS. If not, then something went wrong. In that case, open your Developer Tools and look at the `console` and the `network` activity to see if you can debug any errors.
+
+Note that this is still only a local file and doesn't exist yet in your docker container. In fact, if we run `docker build .` again, The `Dockerfile` doesn't know about this file yet so it will not be added to the container anyway. To include it in the docker container: edit [Dockerfile](Dockerfile), adding a new line with:
 ```
 COPY geoserver.html /usr/share/nginx/html/geoserver.html
 ```
@@ -98,7 +111,9 @@ Then rebuild your docker image:
 ```
 docker build . -t <docker-usermame>/leaflet-intro
 ```
-Next, create a new service in your docker-compose environment. Add the following service to the docker-compose file. 
+
+### 6. Add leaflet to docker-compose
+Next, create a new service in your docker-compose environment. Add the following service to the `docker-compose.yml` file. Note that as a `yml` file the indentation level is critical so make sure your `leaflet` service is at the same indentation of `postgis` and `geoserver` or else it won't parse.
 ```
   leaflet:
     image: <docker-usermame>/leaflet-intro
@@ -107,7 +122,7 @@ Next, create a new service in your docker-compose environment. Add the following
     depends_on:
       - geoserver
  ```
-After updating the docker-compose.yml file, run `docker-compose down` to shut down the currently running postgis and geoserver services and then `docker-compose up` to bring them all back up alongside `leaflet`. Note that if this is the first time running `docker-compose up` after adding a new service, it will pull the docker image and run it fresh. However, if you have changed the configuration of a container _that has already been created_, then `docker-compose up` will NOT re-load the container. We'll show how to deal with this scenario shortly.
+After updating the `docker-compose.yml` file, run `docker-compose down` to shut down the currently running postgis and geoserver services and then `docker-compose up` to bring them all back up alongside `leaflet`. Note that if this is the first time running `docker-compose up` after adding a new service, it will pull the docker image and run it fresh. However, if you have changed the configuration of a container _that has already been created_, then `docker-compose up` will NOT re-load the container. We'll show how to deal with this scenario shortly.
 
 After they have come up (geoserver will be last), open http://localhost/geoserver.html in your browser to see if it loaded correctly.
 
@@ -125,7 +140,8 @@ Congratulations, you are running  a full GIS stack with geospatial backend serve
 - The Developer Toolbox is your friend!
 
 ## Deliverable: Pull Request in `leaflet` branch with:
-1) modified file: `docker-compose.yml`
-2) new file: `geoserver.html`
-3) modified file: `Dockerfile`
-4) new file: `docker-compose-geoserver-screenshot.png` - screenshot showing WMS being served by leaflet 
+1) screenshot: `screenshot-getting-started.png`
+2) modified file: `docker-compose.yml`
+3) new file: `geoserver.html`
+4) modified file: `Dockerfile`
+5) new file: `docker-compose-geoserver-screenshot.png` - screenshot showing WMS being served by leaflet 
