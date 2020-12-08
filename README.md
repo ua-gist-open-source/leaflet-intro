@@ -59,6 +59,8 @@ It will start up very quickly. Next, open http://localhost:8880/getting-started.
 
 _Note that any time you make changes to `getting-started.html`, they will need to be added to a new Dockerfile, so these instructions ^ must be repeated._ 
 
+Side note on the docker network: We did not have to specify the docker network when we ran the leaflet-intro. Why?
+
 ### 3. Shut down the container with `docker stop`
 Now that you have proven that the container works, stop the container. We are going to have it start up in the `docker-compose.yml` config with the other services. To see what docker containers are running:
 ```
