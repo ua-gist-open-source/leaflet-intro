@@ -88,6 +88,14 @@ _Deliverable: Take a screenshot of the initial page of getting-started.html and 
 
 ### 5. Add a WMS from geoserver to your Leaflet Map
 
+You'll need to make sure geoserver (and postgis) are running. Rather than re-use the `docker-compose.yml` file from before, let's shut that down and start another one up here in this directory. To shut down from the other directory with `docker-compose down` if it's running. Alternatively, `docker ps` to list all the running containers and `docker stop <container>`.
+
+Fix the `docker-compose.yml` in this repo with your postgis and geoserver directories and then:
+```
+docker-compose up -d
+```
+To make sure they are running after, do `docker ps` to verify that you have both geoserver and postgis running.
+
 Read the example at https://leafletjs.com/examples/wms/wms.html.
 
 Create a brand new file named `geoserver.html` and copy the contents of `getting-started.html` as a starting point. You are going to add a new layer based on your own geoserver layer group named `osm:osm` from a previous assignment. Note that you will want to update the initial map coordinates, depending on what state you have chosen for your database. Otherwise anybody using your map will have to pan the world to find your OSM WMS data.
