@@ -57,7 +57,7 @@ docker run -p 8880:80 --rm --name leaflet-intro <docker-username>/leaflet-intro
 ```
 It will start up very quickly. Next, open http://localhost:8880/getting-started.html in your browser. If all is well, then you will see the same interactive map.
 
-_Note that any time you make changes to `getting-started.html`, they will need to be added to a new Dockerfile, so these instructions ^ must be repeated._ 
+_Note that any time you make changes to `getting-started.html`, they will need to be added to your Dockerfile and a new image built, so these instructions ^ must be repeated._ 
 
 Side note on the docker network: We did not have to specify the docker network when we ran the leaflet-intro. Why?
 
