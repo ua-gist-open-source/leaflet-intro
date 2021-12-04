@@ -4,6 +4,7 @@
 Leaflet (https://leafletjs.com/) is an open source javascript library for serving mobile friendly maps. Look around https://leafletjs.com/index.html for some background on the project and features of the library, as well as documentation. 
 
 ## Assignment
+Check out this repo to your computer and perform the following work in a branch named `leaflet`:
 
 ### 0. Prerequisites
 - Basic knowledge of HTML
@@ -88,13 +89,41 @@ _Deliverable: Take a screenshot of the initial page of getting-started.html and 
 
 ### 5. Add a WMS from geoserver to your Leaflet Map
 
-You'll need to make sure geoserver (and postgis) are running. Rather than re-use the `docker-compose.yml` file from before, let's shut that down and start another one up here in this directory. To shut down from the other directory with `docker-compose down` if it's running. Alternatively, `docker ps` to list all the running containers and `docker stop <container>`.
+#### 5a. Migrate your docker-compose.yml from the previous assignment to this repo
+In a previous assignment we used `docker compose` to start up two containers simultaneously: one running `postgis` and another running `geoserver`.
+In this assignment we are going to add another to run a webserver that will serve an HTML page that embeds javascript that uses the `leaflet.js`
+javascript library.
 
+In a typical docker compose use case, as we build onto a project, we would be using the same `git` repo and make a new branch with new edits to
+our original `docker-compose.yml` file. However, our use of github classroom makes that slightly awkward so I'm asking that you do a couple of setup items
+to make this assignment work. 
+
+The TL;DR is that we are going to shut down the previous docker compose we had running and copy the docker-compose.yml file to this repo and run it
+from here, in a new branch.
+
+1. Stop your current running docker containers related to previous assignments. There are several ways to do this.
+    Preferred: 
+    
+    a. Navigate in a terminal (i.e., cmd or Powershell for windows users) to the directory containing the `docker-compose.yml` of the _previous assignment_
+    and run 
+    ```
+    docker compose down
+    ```
+    
+   b. Use your Docker Desktop to kill all running docker containers
+   
+   c. Restart Docker Desktop
+   
+   d. From a terminal, use `docker ps` and `docker kill <pid>` to kill all running processes
+   
+2. Copy your `docker-compose.yml` file to this directory and this repo. This assumes you've checked the repo out to your computer and created a new branch. 
+
+#### 5b. Bring up `postgis` and `geoserver` with docker compose from this repo
 Fix the `docker-compose.yml` in this repo with your postgis and geoserver directories and then:
 ```
 docker-compose up -d
 ```
-To make sure they are running after, do `docker ps` to verify that you have both geoserver and postgis running.
+To make sure they are running, do `docker ps` to verify that you have both geoserver and postgis running.
 
 Read the example at https://leafletjs.com/examples/wms/wms.html.
 
@@ -128,7 +157,7 @@ Next, create a new service in your docker-compose environment. Add the following
   leaflet:
     image: <docker-usermame>/leaflet-intro
     ports:
-      - "80:80"
+      - "8888:80"
     depends_on:
       - geoserver
  ```
@@ -144,7 +173,7 @@ After they have come up (geoserver will be last), open http://localhost/geoserve
 Take a screenshot of your browser once you have loaded the WMS through leaflet and name it `docker-compose-geoserver-screenshot.png` to show that you have successfully completed the assignment.
 
 ## Epilogue
-Congratulations, you are running  a full GIS stack with geospatial backend served by OGC-compliant web services which are consumed by not just your desktop client (QGIS) but also a web client. And to boot, it is all served from a small config file.
+Congratulations, you are running  a full GIS stack with geospatial backend served by OGC-compliant web services which are consumed by not just your desktop client (QGIS) but also a web client. And to boot, it is all served from a small config file. Even better, you can take this `docker-compose.yml` file and run it _anywhere_ that docker can run. It would be trivial to run this in an environment that facilitated auto-scaling so that you could ramp up from one to hundreds or thousands of copies of your webapp to accomodate a dynamic load.
 
 ## Troubleshooting tips
 - The Developer Toolbox is your friend!
