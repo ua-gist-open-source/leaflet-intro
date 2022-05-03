@@ -33,7 +33,15 @@ Leaflet (https://leafletjs.com/) is an open source javascript library for servin
 Check out this repo to your computer and perform the following work in a branch named `leaflet`:
 
 ### Deliverables:
-- `screencap-getting-started.png`
+1) screenshot: `screencap-terrain-icecap.png`
+2) screenshot: `screencap-terrain-iceland.png`
+3) screenshot: `screencap-getting-started.png`
+4) screenshot: `screencap-leaflet-geoserver-osm.png`
+5) screenshot: `screencap-docker-compose-geoserver-osm.png`
+6) new file: `docker-compose.yml`
+7) new file: `geoserver.html`
+8) modified file: `Dockerfile`
+
 
 ### 0. Prerequisites
 - **Knowledge**:
