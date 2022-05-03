@@ -14,12 +14,14 @@
 <body>
   <div id="map" style="width: 600px; height: 400px;"></div>
   <script>
-    var map = new L.Map('map', { center: new L.LatLng(21.38,-157.8), zoom: 6, attributionControl:true, zoomControl:false, minZoom:6});  
+    // 64.96, -19.02 is Iceland
+    // 64.8, -18.86 is the Hofsjökull ice cap
+    var map = new L.Map('map', { center: new L.LatLng(64.8,-18.86), zoom: 9, attributionControl:true, zoomControl:false});  
 
     var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
     var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
-    var osm = new L.TileLayer(osmUrl, {minZoom: 5, maxZoom: 18, attribution: osmAttrib});
-    map.addLayer(osm);
+    var osm = new L.TileLayer(osmUrl, {minZoom: 3, maxZoom: 18, attribution: osmAttrib});
+    // map.addLayer(osm);
   </script>
 </body>
 </html>
