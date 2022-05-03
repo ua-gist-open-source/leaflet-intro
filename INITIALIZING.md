@@ -4,14 +4,14 @@ First, bring the services up:
 ```
 docker-compose up
 ```
-Next, populate the database. This example uses `arizona`, but choose a smaller (in DB size) state like `hawaii` or `delaware` if your network is slow.
+Next, populate the database. This example uses `iceland`.
 ```
-docker run --network gist604b -e STATE=arizona -e DATABASE=arizona aaryno/populate-docker-webgis populate-postgis.sh
+docker run --network gist604b -e STATE=iceland -e REGION=europe -e DATABASE=iceland aaryno/populate-docker-webgis populate-postgis.sh
 ```
 If successful, you'll see the output of the `shp2pgsl` and `psql` INSERTs.
 Next, create the geoserver components. This will create layers for all the DB tables you just created as well as a layer group with three of the layers named `osm:osm`:
 ```
-docker run --network gist604b -e STATE=arizona -e DATABASE=arizona aaryno/populate-docker-webgis populate-geoserver.sh
+docker run --network gist604b -e STATE=iceland -e REGION=europe -e DATABASE=iceland aaryno/populate-docker-webgis populate-geoserver.sh
 ```
 That's it.
 
@@ -22,13 +22,13 @@ See https://github.com/ua-gist-open-source/docker-compose-populate to update or 
 
 ### Geoserver Running:
 ```
-docker run --network gist604b aaryno/populate-docker-geo curl -u admin:geoserver http://geoserver:8080/geoserver/rest/workspaces
+docker run --network gist604b aaryno/populate-docker-geo curl -u admin:geoserver http://geoserver:8280/geoserver/rest/workspaces
 ```
 ### PostGIS Installed in your database:
 ```
-docker-compose exec postgis psql -d arizona -U postgres -c "select postgis_full_version()"
+docker-compose exec postgis psql -d iceland -U postgres -c "select postgis_full_version()"
 ```
 ### PostGIS database has data:
 ```
-docker-compose exec postgis psql -d arizona -U postgres -c "select count(*) from waterways"
+docker-compose exec postgis psql -d iceland -U postgres -c "select count(*) from waterways"
 ```
