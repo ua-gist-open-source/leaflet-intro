@@ -86,7 +86,7 @@ Reload the `getting-started.html` and verify that the background map has been ch
 
 Take a screenshot, making sure the url is visible in the browser screenshot, and save this as `screencap-terrain-icecap.png`
 
-Next, change the initial lat/long to `64.8, -18.86` and zoom level to `9` by changing the line that declares `var map`:
+Next, change the initial lat/long to `64.96, -19.02` and zoom level to `6` by changing the line that declares `var map`:
 
 When you reload `getting-started.html` you should now see all of Iceland rendered by the terrain tile map service. 
 
