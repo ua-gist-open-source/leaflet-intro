@@ -3,9 +3,16 @@
 echo "Updating docker-compose.yml with correct volume..."
 sed -i "s#REPO_DIR#$PWD#" docker-compose.yml
 
+echo "Cloning osm-styles geoserver data_dir..."
+cd geoserver
+git clone https://github.com/geosolutions-it/osm-styles.git
 
-echo "Starting postgresql"
-docker compose restart postgis
+echo "Downloading osm-lowres.gpkg..."
+curl -L https://www.dropbox.com/s/bqzxzkpmpybeytr/osm-lowres.gpkg?dl=1 -o osm-styles/data/osm-lowres.gpkg
+cd ..
+
+echo "Starting docker services postgres, geoserver, nginx"
+docker compose up -d
 
 tries=0
 echo "Testing to see if postgresql is running..."
@@ -29,17 +36,11 @@ psql -U postgres -d hawaii -c "CREATE EXTENSION hstore"
 echo "Downloading pbf..."
 curl -L -O https://download.geofabrik.de/north-america/us/hawaii-latest.osm.pbf -o hawaii-latest.osm.pbf
 
-echo "Cloning osm-styles geoserver data_dir..."
-git clone https://github.com/geosolutions-it/osm-styles.git
-
-echo "Downloading osm-lowres.gpkg..."
-curl -L https://www.dropbox.com/s/bqzxzkpmpybeytr/osm-lowres.gpkg?dl=1 -o osm-styles/data/osm-lowres.gpkg
-
 echo "Importing pbf into postgresql..."
 /opt/imposm/imposm-0.11.1-linux-x86-64/imposm import -mapping osm-styles/imposm/mapping.yml -read hawaii-latest.osm.pbf -overwritecache -write -connection postgis://postgres:postgres@localhost/hawaii
 
-echo "Starting geoserver..."
-docker compose restart geoserver
+echo "removing hawaii-latest.osm.pbf"
+rm hawaii-latest.osm.pbf
 
 tries=1
 until curl http://localhost:8080/geoserver/web

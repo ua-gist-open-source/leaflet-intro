@@ -1,19 +1,21 @@
 version: "3.8"
-services:
+volumes:
+  postgres_data:
 
+services:
   postgis:
     image: "mdillon/postgis"
     hostname: postgis
     ports:
       - "5432:5432"
     volumes:
-      - /workspaces/8-0-leaflet-intro-aaryno/postgres_data/data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
   geoserver:
     image: "kartoza/geoserver"
     ports:
       - "8080:8080"
     volumes:
-      - /workspaces/8-0-leaflet-intro-aaryno/osm-styles:/opt/geoserver/data_dir
+      - /workspaces/8-0-leaflet-intro-aaryno/geoserver/osm-styles:/opt/geoserver/data_dir
     environment:
       - GEOSERVER_ADMIN_USER=admin
       - GEOSERVER_ADMIN_PASSWORD=geoserver
@@ -22,6 +24,14 @@ services:
       - HTTP_SCHEME=https
       - MAXIMUM_MEMORY=756M
       - INITIAL_MEMORY=128M
+
+  leaflet:
+    image: "nginx:mainline-alpine"
+    ports:
+      - "80:80"
+    volumes:
+      - /workspaces/8-0-leaflet-intro-aaryno/nginx/html:/usr/share/nginx/html
+      - /workspaces/8-0-leaflet-intro-aaryno/nginx/conf.d:/etc/nginx/conf.d
 
 networks:
   default:
