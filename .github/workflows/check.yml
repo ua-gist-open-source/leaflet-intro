@@ -1,0 +1,23 @@
+name: Check for required files
+
+on:
+  push:
+    branches: [ assignment ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Check File
+        id: check_file
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "screencap-final.png"
+
+      - name: Required file exist
+        if: steps.check_file.outputs.files_exists != 'true'
+        run: |
+          echo Required file, 'screencap-final.png', is missing
+          exit 1

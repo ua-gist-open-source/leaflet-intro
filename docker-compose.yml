@@ -1,0 +1,38 @@
+version: "3.8"
+volumes:
+  postgres_data:
+
+services:
+  postgis:
+    image: "mdillon/postgis"
+    hostname: postgis
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  geoserver:
+    image: "kartoza/geoserver"
+    ports:
+      - "8080:8080"
+    volumes:
+      - /workspaces/8-0-leaflet-intro-aaryno/geoserver/osm-styles:/opt/geoserver/data_dir
+    environment:
+      - GEOSERVER_ADMIN_USER=admin
+      - GEOSERVER_ADMIN_PASSWORD=geoserver
+      - STABLE_EXTENSIONS=css-plugin,feature-pregeneralized-plugin
+      - HTTP_PROXY_NAME=${CODESPACE_NAME}-8080.preview.app.github.dev
+      - HTTP_SCHEME=https
+      - MAXIMUM_MEMORY=756M
+      - INITIAL_MEMORY=128M
+
+  leaflet:
+    image: "nginx:mainline-alpine"
+    ports:
+      - "80:80"
+    volumes:
+      - /workspaces/8-0-leaflet-intro-aaryno/nginx/html:/usr/share/nginx/html
+      - /workspaces/8-0-leaflet-intro-aaryno/nginx/conf.d:/etc/nginx/conf.d
+
+networks:
+  default:
+    name: gist604b
