@@ -46,6 +46,11 @@ After setting up your `docker-compose.yml`, start up your docker services:
 docker compose up -d
 ```
 
+Next, Create the OSM database for Hawaii. I created a script that _should_ automatically re-create the database from the previous assignment.
+```
+./populate_database.sh
+```
+
 You can see them running in the Docker Extension for VS Code.
 
 ### 1. Getting started with Leaflet:
@@ -75,7 +80,7 @@ with `//` like this:
 and add a new line for a different tile service:
 ```
     // var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-    var osmUrl='http://tile.stamen.com/terrain-background/{z}/{x}/{y}.png'
+    var osmUrl='https://stamen-tiles-c.a.ssl.fastly.net/terrain/{z}/{x}/{y}@2x.png'
 ```
 Reload the `getting-started.html` and verify that the background map has been changed to a terrain map.
 
@@ -91,7 +96,8 @@ When you reload `getting-started.html` you should now see the island of Kauai re
 Take a screenshot, making sure the url is visible in the browser screenshot, and save this as `screencap-terrain-kauai.png`
 
 ### 3. Try a different tile background
-Stamen has a few other styles of tile maps we can try out. Let's try `toner`. Change the `osmUrl` value to `'http://tile.stamen.com/toner/{z}/{x}/{y}.png'` and refresh your `getting-started.html` page to see it in effect. Now reload the page.
+Stamen has a few other styles of tile maps we can try out. Let's try `toner`. Change the `osmUrl` value to `'http://stamen-tiles-d.a.ssl.fastly.net/toner/{z}/{x}/{y}@2x.png'` and refresh your `getting-started.html` page to see it in effect. Now reload the page.
+
 
 ### 4. Add a WMS from geoserver to your Leaflet Map
 Next we would like to connect a WMS service containing OSM data you downloaded previously and render it on a leaflet map.
