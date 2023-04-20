@@ -15,7 +15,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - /workspaces/${REPO_NAME}/geoserver/osm-styles:/opt/geoserver/data_dir
+      - /workspaces/${RepositoryName}/geoserver/osm-styles:/opt/geoserver/data_dir
     environment:
       - GEOSERVER_ADMIN_USER=admin
       - GEOSERVER_ADMIN_PASSWORD=geoserver
@@ -24,14 +24,6 @@ services:
       - HTTP_SCHEME=https
       - MAXIMUM_MEMORY=756M
       - INITIAL_MEMORY=128M
-
-  leaflet:
-    image: "nginx:mainline-alpine"
-    ports:
-      - "80:80"
-    volumes:
-      - /workspaces/${REPO_NAME}/nginx/html:/usr/share/nginx/html
-      - /workspaces/${REPO_NAME}/nginx/conf.d:/etc/nginx/conf.d
 
 networks:
   default:
