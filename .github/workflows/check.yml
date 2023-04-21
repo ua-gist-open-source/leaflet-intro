@@ -66,10 +66,10 @@ jobs:
         id: check_file
         uses: andstor/file-existence-action@v1
         with:
-          files: "html/geoserver.html"
+          files: "nginx/html/geoserver.html"
 
       - name: Required file exist
         if: steps.check_file.outputs.files_exists != 'true'
         run: |
-          echo Required file, 'html/geoserver.html', is missing
+          echo Required file, 'nginx/html/geoserver.html', is missing
           exit 1
