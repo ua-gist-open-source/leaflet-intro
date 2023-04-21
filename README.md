@@ -49,7 +49,10 @@ Deliverables are listed at the bottom.
 To double check this is configured correctly: 
 1) Check that docker is running
   - In the terminal window type `docker ps`.
-    - If no containers are listed, type `./populate_database.sh` to run the initialization script
+    - If no containers are listed, type this to run the initialization script: 
+```
+bash ./populate_database.sh
+```` 
 2) Check your geoserver to ensure that it shows the Hawaii OSM layers:
 - Click on `Ports` in the `Terminal` codespace panel
 - Select the `Open in Browser` option
