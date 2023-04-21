@@ -188,7 +188,7 @@ As you read the example, note some differences in the urls of their example. For
 ```
 and replace them with this:
 ```
-    var wmsLayer= L.tileLayer.wms("http://localhost:8280/geoserver/osm/wms", {
+    var wmsLayer= L.tileLayer.wms("YOUR_CODESPACE_GEOSERVER_URL/geoserver/osm/wms", {
         layers: 'osm:osm',
         format: 'image/png',
         transparent: true
@@ -212,4 +212,5 @@ Congratulations, you are running  a full GIS stack with geospatial backend serve
 2) screenshot: `screencap-terrain.png`
 3) screenshot: `screencap-watercolor.png`
 4) screenshot: `screencap-leaflet-geoserver-osm.png`
-5) new file: `html/geoserver.html`
+5) changes to file: `docker-compose.yml`
+6) new file: `nginx/html/geoserver.html`
