@@ -45,6 +45,20 @@ If you open the `docker-compose.yml` file you can find the `postgis` and `geoser
 
 Deliverables are listed at the bottom.
 
+**Important: Check the initialization** 
+To double check this is configured correctly: 
+1) Check that docker is running
+  - In the terminal window type `docker ps`.
+    - If no containers are listed, type `./populate_database.sh` to run the initialization script
+2) Check your geoserver to ensure that it shows the Hawaii OSM layers:
+- Click on `Ports` in the `Terminal` codespace panel
+- Select the `Open in Browser` option
+- In the browser, add `/geoserver` to the URL to get to the geoserver landing page. 
+- From the geoserver landing page, click `Layer Preview` from the left menu
+- Find the layer named `osm:osm` and click `OpenLayers`
+
+If the page loads a new tab with a Hawaii map then you are good. For any other issue, debug the errors that might be listed in the geoserver log.
+
 ### 1. Add leaflet to docker-compose.yml
 In addition to `postgis` and `geoserver`, we need to run a webserver in order to serve our HTML page that contains leaflet.js map rendering code. The webserver we are using in [nginx](https://www.nginx.com/resources/glossary/nginx/), the most popular webserver on the web. 
 
