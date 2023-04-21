@@ -20,40 +20,56 @@ The following will have been created in a previous assignment but are provided w
 Leaflet (https://leafletjs.com/) is an open source javascript library for serving mobile friendly maps. Look around https://leafletjs.com/index.html for some background on the project and features of the library, as well as documentation. 
 
 ## Assignment
-Check out this repo to your computer and perform the following work in a branch named `leaflet`. Deliverables are listed at the bottom.
+Create a branch named `leaflet` and open a Codespace on the `leaflet` branch. 
 
-### 0. Environment setup:
-Open your `docker-compose.yml` file and replace the `${REPO_NAME}` string in the volume mappings for the three services: 
-`postgres`: 
-- `- /workspaces/${REPO_NAME}/postgres_data/data:/var/lib/postgresql/data`
-`geoserver`:
-- `- /workspaces/${REPO_NAME}/osm-styles:/opt/geoserver/data_dir`
-`leaflet`:
-- `- /workspaces/${REPO_NAME}/html:/usr/share/nginx/html`
+The Codespace should initialize to the final state of the Geoserver-OSM-II assignment. That is, with a working PostGIS database populated with OSM data and a working geoserver with nice OSM styles and an `osm:osm` layergroup. Details are given in Environment Setup:
 
-In my case, my workspace repository is named `8-0-leaflet-intro-aaryno`, where the "`aaryno`" part is my github username. Yours will be slightly different but this is how mine would look: 
+### Environment setup (already done for you):
 
-`postgres`: 
-- `- /workspaces/8-0-leaflet-intro-aaryno/postgres_data/data:/var/lib/postgresql/data`
-`geoserver`:
-- `- /workspaces/8-0-leaflet-intro-aaryno/osm-styles:/opt/geoserver/data_dir`
-`leaflet`:
-- `- /workspaces/8-0-leaflet-intro-aaryno/html:/usr/share/nginx/html`
+During codespace creation, a script was run to initialize `postgis` and `geoserver` containers to match the final state of the assignment for Geoserver-OSM-Styles.
 
-After setting up your `docker-compose.yml`, start up your docker services:
+Review this script, [.devcontainer/library-scripts/populate-database.sh](.devcontainer/library-scripts/populate-database.sh) and see how this was done.
 
+Notably, the steps we followed in a previous assignment were automated in this script in this order:
+1) Clone the osm-styles repo.
+2) Download the osm-lowres gpkg.
+3) Start up `postgis` and `geoserver` with `docker compose up -d`
+4) Wait for `postgis` to be ready and then:
+5) Create the `hawaii` database and `postgis` extension.
+6) Download the `hawaii-latest.osm.pbf` OSM import file from https://geofrabrik.de.
+7) Run `imposm import` to populate the postgis `hawaii` database
+8) Wait for geoserver to be ready (just in case it's not yet)
+9) Use the geoserver REST API to fix the osm datastore for the `osm-styles`-based geoserver.
+
+If you open the `docker-compose.yml` file you can find the `postgis` and `geoserver` services. The `postgis` service uses a named docker volume while the `geoserver` service uses the `git clone`d [osm-styles](https://github.com/geosolutions-it/osm-styles) repo as its DATA_DIR.
+
+Deliverables are listed at the bottom.
+
+### 1. Add leaflet to docker-compose.yml
+In addition to `postgis` and `geoserver`, we need to run a webserver in order to serve our HTML page that contains leaflet.js map rendering code. The webserver we are using in [nginx](https://www.nginx.com/resources/glossary/nginx/), the most popular webserver on the web. 
+
+The configuration is in [nginx/](nginx/). This also contains:
+- [nginx/conf.d](nginx/conf.d) contains custom configuration to enable this to work in a codespace. 
+- [nginx/html](nginx/html) contains content that will be served via http requests. Note that you will be editing and adding files in this directory. 
+
+#### Setting up leaflet
+
+Add the following service to your docker-compose.yml file. Be sure to line up the indentation of the `leaflet:` service declaration at the same depth as `postgis:` and `geoserver:`
+```
+  leaflet:
+    image: "nginx:mainline-alpine"
+    ports:
+      - "80:80"
+    volumes:
+      - /workspaces/${RepositoryName}/nginx/html:/usr/share/nginx/html
+      - /workspaces/${RepositoryName}/nginx/conf.d:/etc/nginx/conf.d
+```
+Once you have updated your docker compose file, run 
 ```
 docker compose up -d
 ```
 
-Next, Create the OSM database for Hawaii. I created a script that _should_ automatically re-create the database from the previous assignment.
-```
-./populate_database.sh
-```
-
-You can see them running in the Docker Extension for VS Code.
-
-### 1. Getting started with Leaflet:
+### 2. Getting started with Leaflet:
 Refer to the following 
 https://leafletjs.com/examples/quick-start/
 
@@ -67,39 +83,79 @@ Confirm the map is visible and interactive. It should be zoomed initially to the
 
 Note that this container is actually just running a small webserver serving files from your `html` directory in this codespace. There is a single file, `index.html`, which is what the web server, nginx, will serve by default if a file path is not given. There is a `getting-started.html` file as well. If you add additional files to the `html` directory they will be accessible from your web browser by appending the filenames to the Local Address url.
 
-### 2. Modify `getting-started.html` for different options.
+### 3. Modify `getting-started.html` for different options.
 
-In VS Code, open the `html/getting-started.html` file. First, modify the url of the tile service. Instead of using `tile.openstreetmap.org`, we will change it to a service in the `tile.stamen.com` domain. We comment out this line:
-```
-    var osmUrl='http://tile.stamen.com/terrain-background/{z}/{x}/{y}.png'
-```
-with `//` like this:
-```
-    // var osmUrl='http://tile.stamen.com/terrain-background/{z}/{x}/{y}.png'
-```
-and add a new line for a different tile service:
-```
-    // var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-    var osmUrl='https://stamen-tiles-c.a.ssl.fastly.net/terrain/{z}/{x}/{y}@2x.png'
-```
-Reload the `getting-started.html` and verify that the background map has been changed to a terrain map.
+In VS Code, open the `html/getting-started.html` file. 
+There are three sections worth describing.
+#### <head>
+In the `<head>` section, there are two lines that import leaflet-related files:
+- `<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" .../>`
+  - Imports the CSS (Styles) for leaflet
+- `<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" ...`
+  - Imports the `leaflet.js` javascript library for use in `<script>`s
 
-Take a screenshot, making sure the url is visible in the browser screenshot, and save this as `screencap-terrain-hawaii.png`
+#### <body>
+In the `<body>` there are two elements to note:
+- `<div id="map" style="width: 600px; height: 400px;"></div>`
+  - This is an HTML element that will be where our slippy map is rendered.
+- `<script>....`
+  - This contains the relevant javascript for initializing our leaflet map.
 
-Next, change the initial lat/long to `22.05, -159.55` and zoom level to `10` by changing the line that declares `var map`:
+The main section of this file we are changing is in the `<script>` section:
+```
+    var map = new L.Map('map', { center: new L.LatLng( 19.5429, -155.6659), zoom: 8, attributionControl:true, zoomControl:false});  
+    var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+    var osm = new L.TileLayer(osmUrl, {minZoom: 3, maxZoom: 18, attribution: osmAttrib});
+    map.addLayer(osm);
+```
+
+To be able to tweak this to your needs, we need to understand how this works. Even if you don't know javascript this should be familiar enough to make modifications to. Let's look at each line individually:
+
+```
+    var map = new L.Map('map', { center: new L.LatLng( 19.5429, -155.6659), zoom: 8, attributionControl:true, zoomControl:false});  
+```
+The line above instantiates a new `L.Map` object. This is an object in javascript memory that contains information about a map. As part of the initialization it identifies the `map` ID, which corresponds to the `<div id="map"... />` HTML element where the map will be rendered
+```
+    var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+```
+This is just a string that contains a templated line for a tiled map service. The template has placeholders for `s` (subdomain), `z` (zoom level), `x` (x-tile index), and `y` (y-tile index). While `x`, `y`, and `z` are easy enough to guess, the `s` is an optimization for speeding up the webpage. A map tile provider can serve web tiles from multiple sites in order to accelerate the rate at which a client (i.e., your browser) can request and receive tiles.
+
+```
+    var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+```
+This is another string that just prints attribution data.
+```
+    var osm = new L.TileLayer(osmUrl, {minZoom: 3, maxZoom: 18, attribution: osmAttrib});
+```
+This is another important `leaflet.js` function that instantiates a type of `Layer` - specifically a `TileLayer` based on the `osmUrl` and other attributes. At this point it has not been added to the `map` object and cannot and has not been rendered.
+```
+    map.addLayer(osm);
+```
+This is the final piece of the puzzle. This adds the `osm` `TileLayer` to the `map` object.
+
+Your first task is to change the `getting-started.html` and learn about the interaction of your edits to HTML, javascript, and how it relates to the webpage.
+
+First, change the initial lat/long to `22.05, -159.55` and zoom level to `10` by changing the line that declares `var map`:
 ```
       var map = new L.Map('map', { center: new L.LatLng( 22.05, -159.55), zoom: 10, attributionControl:true, zoomControl:false});  
 ```
 
 When you reload `getting-started.html` you should now see the island of Kauai rendered by the terrain tile map service. 
 
-Take a screenshot, making sure the url is visible in the browser screenshot, and save this as `screencap-terrain-kauai.png`
+Take a screenshot, making sure the url is visible in the browser screenshot.
 
-### 3. Try a different tile background
-Stamen has a few other styles of tile maps we can try out. Let's try `toner`. Change the `osmUrl` value to `'http://stamen-tiles-d.a.ssl.fastly.net/toner/{z}/{x}/{y}@2x.png'` and refresh your `getting-started.html` page to see it in effect. Now reload the page.
+Save this as 
+- `screencap-osm-kauai.png`
 
+### 4. Try a different tile background
+Stamen Maps is a maps and visualization studio that has produced a number of free maps that you can use. See http://maps.stamen.com/#terrain/11/36.3716/-121.7322 for details on how to use the stamen maps in your project. 
 
-### 4. Add a WMS from geoserver to your Leaflet Map
+Follow the directions on the stamen website to produce two new maps (with screenshots) for `terrain` and `watercolor`. Feel free to use different coordinates/zoom levels. Save these as:
+- `screencap-terrain.png`
+- `screencap-watercolor.png`
+
+### 5. Add a WMS from geoserver to your Leaflet Map
 Next we would like to connect a WMS service containing OSM data you downloaded previously and render it on a leaflet map.
 
 Read the example at https://leafletjs.com/examples/wms/wms.html.
@@ -123,8 +179,10 @@ and replace them with this:
     map.addLayer(wmsLayer)
 ```  
 
-Save the `geoserver.html` page and open it in your browser. There is a pre-made link for you on the index page of the `Local Address` landing page. You should see the symbology from your WMS after a brief wait. If not, then something went wrong. In that case, open your Developer Tools and look at the `console` and the `network` activity to see if you can debug any errors.
+Save the `geoserver.html` page (make sure it is in the `nginx/html` folder) and open it in your browser. There is a pre-made link for you on the index page of the `Local Address` landing page. You should see the symbology from your WMS after a brief wait. If not, then something went wrong. In that case, open your Developer Tools and look at the `console` and the `network` activity to see if you can debug any errors.
 
+Take a screenshot of your working geoserver.html page and save it as:
+- `screencap-leaflet-geoserver-osm.png`
 
 ## Epilogue
 Congratulations, you are running  a full GIS stack with geospatial backend served by OGC-compliant web services which are consumed by not just your desktop client (QGIS) but also a web client. And to boot, it is all served from a small config file. Even better, you can take this `docker-compose.yml` file and run it _anywhere_ that docker can run. It would be trivial to run this in an environment that facilitated auto-scaling so that you could ramp up from one to hundreds or thousands of copies of your webapp to accomodate a dynamic load.
@@ -133,7 +191,8 @@ Congratulations, you are running  a full GIS stack with geospatial backend serve
 - The Developer Toolbox is your friend!
 
 ## Deliverable: Pull Request in `assignment` branch with:
-1) screenshot: `screencap-terrain-hawaii.png`
-2) screenshot: `screencap-terrain-kauai.png`
-3) screenshot: `screencap-leaflet-geoserver-osm.png`
-4) new file: `html/geoserver.html`
+1) screenshot: `screencap-osm-kauai.png`
+2) screenshot: `screencap-terrain.png`
+3) screenshot: `screencap-watercolor.png`
+4) screenshot: `screencap-leaflet-geoserver-osm.png`
+5) new file: `html/geoserver.html`

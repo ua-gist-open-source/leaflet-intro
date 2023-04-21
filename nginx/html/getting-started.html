@@ -15,11 +15,17 @@
   <div id="map" style="width: 600px; height: 400px;"></div>
   <script>
     var map = new L.Map('map', { center: new L.LatLng( 19.5429, -155.6659), zoom: 8, attributionControl:true, zoomControl:false});  
-    // var map = new L.Map('map', { center: new L.LatLng( 22.05, -159.55), zoom: 10, attributionControl:true, zoomControl:false});  
+    // var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    // var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+    // var osm = new L.TileLayer(osmUrl, {minZoom: 3, maxZoom: 18, attribution: osmAttrib});
+    var wmsLayer= L.tileLayer.wms("https://aaryno-supreme-halibut-v6vp6qp7wvqhwvg4-8080.preview.app.github.dev/geoserver/osm/wms", {
+        layers: 'osm:osm',
+        format: 'image/png',
+        transparent: true
+    });
+    https://aaryno-supreme-halibut-v6vp6qp7wvqhwvg4-8080.preview.app.github.dev/geoserver/ows?service=WMS&version=1.3.0&request=GetCapabilities
+    map.addLayer(wmsLayer)
 
-    var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-    var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
-    var osm = new L.TileLayer(osmUrl, {minZoom: 3, maxZoom: 18, attribution: osmAttrib});
     map.addLayer(osm);
   </script>
 </body>

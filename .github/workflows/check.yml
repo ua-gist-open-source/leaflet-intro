@@ -14,10 +14,62 @@ jobs:
         id: check_file
         uses: andstor/file-existence-action@v1
         with:
-          files: "screencap-final.png"
+          files: "screencap-osm-kauai.png"
 
       - name: Required file exist
         if: steps.check_file.outputs.files_exists != 'true'
         run: |
-          echo Required file, 'screencap-final.png', is missing
+          echo Required file, 'screencap-osm-kauai.png', is missing
+          exit 1
+
+
+      - name: Check File
+        id: check_file
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "screencap-terrain.png"
+
+      - name: Required file exist
+        if: steps.check_file.outputs.files_exists != 'true'
+        run: |
+          echo Required file, 'screencap-terrain.png', is missing
+          exit 1
+
+
+      - name: Check File
+        id: check_file
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "screencap-watercolor.png"
+
+      - name: Required file exist
+        if: steps.check_file.outputs.files_exists != 'true'
+        run: |
+          echo Required file, 'screencap-watercolor.png', is missing
+          exit 1
+
+
+      - name: Check File
+        id: check_file
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "screencap-leaflet-geoserver-osm.png"
+
+      - name: Required file exist
+        if: steps.check_file.outputs.files_exists != 'true'
+        run: |
+          echo Required file, 'screencap-leaflet-geoserver-osm.png', is missing
+          exit 1
+
+
+      - name: Check File
+        id: check_file
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "html/geoserver.html"
+
+      - name: Required file exist
+        if: steps.check_file.outputs.files_exists != 'true'
+        run: |
+          echo Required file, 'html/geoserver.html', is missing
           exit 1

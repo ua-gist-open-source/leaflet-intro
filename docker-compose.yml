@@ -11,11 +11,11 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
   geoserver:
-    image: "kartoza/geoserver"
+    image: "kartoza/geoserver:2.22.0"
     ports:
       - "8080:8080"
     volumes:
-      - /workspaces/${RepositoryName}/geoserver/osm-styles:/opt/geoserver/data_dir
+      - /workspaces/${RepositoryName}/osm-styles:/opt/geoserver/data_dir
     environment:
       - GEOSERVER_ADMIN_USER=admin
       - GEOSERVER_ADMIN_PASSWORD=geoserver
