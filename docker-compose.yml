@@ -22,8 +22,6 @@ services:
       - STABLE_EXTENSIONS=css-plugin,feature-pregeneralized-plugin
       - HTTP_PROXY_NAME=${CODESPACE_NAME}-8080.preview.app.github.dev
       - HTTP_SCHEME=https
-      - MAXIMUM_MEMORY=756M
-      - INITIAL_MEMORY=128M
 
 networks:
   default:
