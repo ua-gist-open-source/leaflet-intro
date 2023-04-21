@@ -1,15 +1,13 @@
-!/bin/bash
+#!/bin/bash
 
 echo "Updating docker-compose.yml with correct volume..."
 sed -i "s#REPO_DIR#$PWD#" docker-compose.yml
 
 echo "Cloning osm-styles geoserver data_dir..."
-cd geoserver
 git clone https://github.com/geosolutions-it/osm-styles.git
 
 echo "Downloading osm-lowres.gpkg..."
 curl -L https://www.dropbox.com/s/bqzxzkpmpybeytr/osm-lowres.gpkg?dl=1 -o osm-styles/data/osm-lowres.gpkg
-cd ..
 
 echo "Starting docker services postgres, geoserver, nginx"
 docker compose up -d
