@@ -1,3 +1,4 @@
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/CLSU7DxW)
 [![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-f4981d0f882b2a3f0472912d15f9806d57e124e0fc890972558857b51b24a6f9.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=9489988)
 # Leaflet Intro
 
@@ -24,13 +25,15 @@ Create a branch named `leaflet` and open a Codespace on the `leaflet` branch.
 
 The Codespace should initialize to the final state of the Geoserver-OSM-II assignment. That is, with a working PostGIS database populated with OSM data and a working geoserver with nice OSM styles and an `osm:osm` layergroup. Details are given in Environment Setup:
 
-### Environment setup (already done for you):
+### Environment setup :
 
-During codespace creation, a script was run to initialize `postgis` and `geoserver` containers to match the final state of the assignment for Geoserver-OSM-Styles.
+This lab is meant to follow up after Geoserver-OSM-Styles. To this end we need a geoserver, a postgis, and the OSM database that you created previously. There is a script in this repo that should initialize all this for you. Run it:
+```
+./initialize.sh
+```
 
-Review this script, [.devcontainer/library-scripts/populate-database.sh](.devcontainer/library-scripts/populate-database.sh) and see how this was done.
 
-Notably, the steps we followed in a previous assignment were automated in this script in this order:
+Notably, this script does the following:
 1) Clone the osm-styles repo.
 2) Download the osm-lowres gpkg.
 3) Start up `postgis` and `geoserver` with `docker compose up -d`
