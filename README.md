@@ -184,7 +184,7 @@ Create a brand new file in the `html` directory named `geoserver.html` and copy 
 
 As you read the example, note some differences in the urls of their example. For the `geoserver.html` file we will remove the references to `var osmUrl`, `var osmAttrib`, and `var osm` and remove the line that adds the `osm` layer to the map. Specifically, we will remove these lines:
 ```
-    var osmUrl='http://tile.stamen.com/toner/{z}/{x}/{y}.png'
+    var osmUrl='http://tile.stadiamaps.com/toner/{z}/{x}/{y}.png'
     var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
     var osm = new L.TileLayer(osmUrl, {minZoom: 3, maxZoom: 18, attribution: osmAttrib});
     map.addLayer(osm);
