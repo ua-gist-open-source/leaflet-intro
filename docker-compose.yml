@@ -1,7 +1,3 @@
-version: "3.8"
-volumes:
-  postgres_data:
-
 services:
   postgis:
     image: "mdillon/postgis"
@@ -9,20 +5,33 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - type: volume
+        source: postgresql_data_volume
+        target: /var/lib/postgresql/data
   geoserver:
-    image: "kartoza/geoserver:2.22.0"
+    image: docker.osgeo.org/geoserver:2.24.x
     ports:
       - "8080:8080"
     volumes:
-      - /workspaces/${RepositoryName}/osm-styles:/opt/geoserver/data_dir
+      - /workspaces/${RepositoryName}/osm-styles:/opt/geoserver_data
     environment:
-      - GEOSERVER_ADMIN_USER=admin
-      - GEOSERVER_ADMIN_PASSWORD=geoserver
-      - STABLE_EXTENSIONS=css-plugin,feature-pregeneralized-plugin
-      - HTTP_PROXY_NAME=${CODESPACE_NAME}-8080.preview.app.github.dev
-      - HTTP_SCHEME=https
+      - ROOT_WEBAPP_REDIRECT=true
+      - CORS_ENABLED=true
+      - CORS_ALLOWED_ORIGINS="${CODESPACE_NAME}-8080.app.github.dev,github.dev,localhost,0.0.0.0,127.0.0.1"
+      - CORS_ALLOWED_METHODS="GET,POST,PUT,DELETE,HEAD,OPTIONS"
+      - CORS_ALLOWED_HEADERS="*"
+      - geoserver.xframe.shouldSetPolicy=false
+      - geoserver.xContentType.shouldSetPolicy=false
+      - GEOSERVER_CSRF_WHITELIST=${CODESPACE_NAME}-8080.app.github.dev
+      - GEOSERVER_CSRF_DISABLE=true
+      - PROXY_BASE_URL=https://${CODESPACE_NAME}-8080.app.github.dev/geoserver
+      - SKIP_DEMO_DATA=true
+      - INSTALL_EXTENSIONS=true
+      - STABLE_EXTENSIONS=css,feature-pregeneralized
 
 networks:
   default:
     name: gist604b
+
+volumes:
+  postgresql_data_volume:
