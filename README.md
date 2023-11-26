@@ -169,11 +169,10 @@ Save this as
 - `screencap-osm-kauai.png`
 
 ### 4. Try a different tile background
-Stamen Maps is a maps and visualization studio that has produced a number of free maps that you can use. See http://maps.stamen.com/#terrain/11/36.3716/-121.7322 for details on how to use the stamen maps in your project. 
+Tile maps are a popular way of serving semi-static map data. However, the storage cost of holding many high-res tiles of the full globe is difficult. When this lesson was first taught a set of maps from Stamen (now Stadia) was available. Unfortunately, those are not available. Use your expert googling skills to find a map tile service and replace the OSM service above. As of 11/25/2023, this site lists some free map tiling sites to try: https://github.com/roblabs/xyz-raster-sources. 
 
-Follow the directions on the stamen website to produce two new maps (with screenshots) for `terrain` and `watercolor`. Feel free to use different coordinates/zoom levels. Save these as:
-- `screencap-terrain.png`
-- `screencap-watercolor.png`
+Take ascreenshot of your new map and save it as:
+- `screencap-tile-map.png`
 
 ### 5. Add a WMS from geoserver to your Leaflet Map
 Next we would like to connect a WMS service containing OSM data you downloaded previously and render it on a leaflet map.
@@ -212,8 +211,7 @@ Congratulations, you are running  a full GIS stack with geospatial backend serve
 
 ## Deliverable: Pull Request in `assignment` branch with:
 1) screenshot: `screencap-osm-kauai.png`
-2) screenshot: `screencap-terrain.png`
-3) screenshot: `screencap-watercolor.png`
-4) screenshot: `screencap-leaflet-geoserver-osm.png`
-5) changes to file: `docker-compose.yml`
-6) new file: `nginx/html/geoserver.html`
+2) screenshot: `screencap-tile-map.png`
+3) screenshot: `screencap-leaflet-geoserver-osm.png`
+4) changes to file: `docker-compose.yml`
+5) new file: `nginx/html/geoserver.html`
