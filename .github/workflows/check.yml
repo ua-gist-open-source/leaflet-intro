@@ -27,25 +27,12 @@ jobs:
         id: check_file
         uses: andstor/file-existence-action@v1
         with:
-          files: "screencap-terrain.png"
+          files: "screencap-tile-map.png"
 
       - name: Required file exist
         if: steps.check_file.outputs.files_exists != 'true'
         run: |
-          echo Required file, 'screencap-terrain.png', is missing
-          exit 1
-
-
-      - name: Check File
-        id: check_file
-        uses: andstor/file-existence-action@v1
-        with:
-          files: "screencap-watercolor.png"
-
-      - name: Required file exist
-        if: steps.check_file.outputs.files_exists != 'true'
-        run: |
-          echo Required file, 'screencap-watercolor.png', is missing
+          echo Required file, 'screencap-tile-map.png', is missing
           exit 1
 
 
