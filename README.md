@@ -1,5 +1,3 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/CLSU7DxW)
-[![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-f4981d0f882b2a3f0472912d15f9806d57e124e0fc890972558857b51b24a6f9.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=9489988)
 # Leaflet Intro
 
 ## Background
@@ -25,7 +23,7 @@ Create a branch named `leaflet` and open a Codespace on the `leaflet` branch.
 
 The Codespace should initialize to the final state of the Geoserver-OSM-II assignment. That is, with a working PostGIS database populated with OSM data and a working geoserver with nice OSM styles and an `osm:osm` layergroup. Details are given in Environment Setup:
 
-### Environment setup :
+### Environment setup:
 
 This lab is meant to follow up after Geoserver-OSM-Styles. To this end we need a geoserver, a postgis, and the OSM database that you created previously. There is a script in this repo that should initialize all this for you. Run it:
 ```
